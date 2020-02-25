@@ -1,0 +1,21 @@
+Package: deepToolsDownstream
+Type: Package
+Title: downstream plots for deepTools
+Version: 0.01
+Encoding: UTF-8
+Author: Jianhong Ou
+Maintainer: Jianhong Ou <ou.jianhong@gmail.com>
+Depends:
+    R (>= 3.6)
+Imports:
+    utils, methods, BiocGenerics,
+    ggplot2, reshape2, Rsamtools, rjson,
+    SummarizedExperiment, GenomicRanges, R.utils, S4Vectors,
+    IRanges
+Suggests:
+    knitr,colorBlindness
+Description: Read the deepTools computeMatrix output and replot the data.
+License: GPL (>= 2)
+LazyLoad: yes
+VignetteBuilder: knitr
+RoxygenNote: 7.0.2

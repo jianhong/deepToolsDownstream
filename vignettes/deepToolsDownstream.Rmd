@@ -1,0 +1,45 @@
+---
+title: "deepToolsDownstream vignette"
+author: "Jianhong Ou"
+date: "`r format(Sys.time(), '%m/%d/%Y')`"
+package: "`r packageVersion('deepToolsDownstream')`"
+vignette: >
+  %\VignetteIndexEntry{trackViewer Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+output:
+  html_document:
+    theme: simplex
+    toc: true
+    toc_float: true
+    toc_depth: 4
+    fig_caption: true
+---
+
+```{r setup, include=FALSE}
+suppressPackageStartupMessages({
+  library(deepToolsDownstream)
+  library(S4Vectors)
+  library(colorBlindness)
+  library(ggplot2)
+})
+knitr::opts_chunk$set(warning=FALSE, message=FALSE)
+```
+
+## Quick start
+
+```{r}
+library(deepToolsDownstream)
+file <- system.file("extdata", "count.gz", package= "deepToolsDownstream")
+## step 1 import file
+se <- importCount(file)
+## step 2 plot profile
+p <- plotProfile(se)
+library(S4Vectors)
+library(colorBlindness)
+library(ggplot2)
+cols <- safeColors[-1][seq_along(metadata(se)$sample_labels)]
+names(cols) <- metadata(se)$sample_labels
+plot(p + scale_color_manual(values = cols))
+```
+
