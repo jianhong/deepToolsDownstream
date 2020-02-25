@@ -37,7 +37,7 @@ plotProfile <- function(se, loessSmooth = TRUE, span = 1/25,
     split(.ele, group)
   })
   ## unlist counts and rename the samples by letters.
-  old_name <- names(counts)
+  old_name <- header$sample_labels
   if(length(counts)>26){
     stop("Can not handle samples more than 26.")
   }
@@ -66,7 +66,7 @@ plotProfile <- function(se, loessSmooth = TRUE, span = 1/25,
                                        as.character(d_melt$sample_group))])
   d_melt$group <- factor(sub("^..", "", as.character(d_melt$sample_group)))
   d_melt$x <- as.numeric(sub("^B|D", "", as.character(d_melt$coord)))
-  lines <- c(0, d_melt$x[which(grepl("^D", as.character(d_melt$coord)))[1]] - header$`bin size`[1]/2)
+  lines <- unique(c(0, d_melt$x[which(grepl("^D", as.character(d_melt$coord)))[1]] - header$`bin size`[1]/2))
   x <- ifelse(facet=="group", "sample", "group")
   if(length(xaxis_breaks)==0){
     xaxis_breaks <- c(-1*header$upstream[1], lines, sum(lines)+header$downstream[1])
