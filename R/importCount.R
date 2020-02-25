@@ -40,7 +40,8 @@ importCount <- function(file){
   strand[strand=="."] <- "*"
   anno <- GRanges(anno$V1, ranges = IRanges(anno$V2, anno$V3, names = anno$V4),
                   score=anno$V5, strand = strand, 
-                  group = rep(header$group_labels, diff(header$group_boundaries)))
+                  group = factor(rep(header$group_labels, diff(header$group_boundaries)),
+                                 levels = header$group_labels))
   se <- SummarizedExperiment(assays = dd, rowRanges = anno, 
                              metadata = header)
   se
