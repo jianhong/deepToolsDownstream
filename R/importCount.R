@@ -36,8 +36,10 @@ importCount <- function(file){
   header$`bin size`,
   SIMPLIFY = FALSE)
   names(dd) <- header$sample_labels
+  strand <- as.character(anno$V6)
+  strand[strand=="."] <- "*"
   anno <- GRanges(anno$V1, ranges = IRanges(anno$V2, anno$V3, names = anno$V4),
-                  score=anno$V5, strand = anno$V6, 
+                  score=anno$V5, strand = strand, 
                   group = rep(header$group_labels, diff(header$group_boundaries)))
   se <- SummarizedExperiment(assays = dd, rowRanges = anno, 
                              metadata = header)
