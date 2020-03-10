@@ -21,7 +21,9 @@ to smooth curve or not.}
 
 \item{span}{smoothness parameter for loess.}
 
-\item{facet}{group or sample. This will be passed to \link[ggplot2:facet_wrap]{facet_wrap}.}
+\item{facet}{group or sample. 
+This will be passed to \link[ggplot2:facet_wrap]{facet_wrap}.
+It can be set to NULL.}
 
 \item{xaxis_breaks, xaxis_label}{xaxis breaks and labels. see \link[ggplot2:scale_continuous]{scale_x_continuous}.}
 }

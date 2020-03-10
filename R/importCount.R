@@ -12,6 +12,7 @@
 #' file <- system.file("extdata", "count.gz", package= "deepToolsDownstream")
 #' se <- importCount(file)
 importCount <- function(file){
+  stopifnot(length(file)==1)
   f <- gzfile(file, open = "r")
   on.exit(close(f))
   headerL <- readLines(f, n=1)

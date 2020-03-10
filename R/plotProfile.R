@@ -4,7 +4,9 @@
 #' @param loessSmooth Use \link[stats:scatter.smooth]{loess.smooth} 
 #' to smooth curve or not.
 #' @param span smoothness parameter for loess.
-#' @param facet group or sample. This will be passed to \link[ggplot2:facet_wrap]{facet_wrap}.
+#' @param facet group or sample. 
+#' This will be passed to \link[ggplot2:facet_wrap]{facet_wrap}.
+#' It can be set to NULL.
 #' @param xaxis_breaks,xaxis_label xaxis breaks and labels. see \link[ggplot2:scale_continuous]{scale_x_continuous}.
 #' @importFrom SummarizedExperiment rowRanges assays
 #' @importFrom S4Vectors metadata
@@ -23,9 +25,16 @@ plotProfile <- function(se, loessSmooth = TRUE, span = 1/25,
                         xaxis_breaks=NULL,
                         xaxis_label=NULL){
   stopifnot(is(se, "SummarizedExperiment"))
-  facet <- facet[1]
-  if(!facet %in% c("sample", "group")){
-    stop("facet must be sample or group")
+  if(length(facet)>0){
+    facet <- facet[1]
+    if(!facet %in% c("sample", "group")){
+      stop("facet must be sample or group")
+    }
+    x <- ifelse(facet=="group", "sample", "group")
+    setFacet <- TRUE
+  }else{
+    x <- "sample"
+    setFacet <- FALSE
   }
   counts <- assays(se)
   anno <- rowRanges(se)
@@ -45,7 +54,7 @@ plotProfile <- function(se, loessSmooth = TRUE, span = 1/25,
   names(counts) <- LETTERS[seq_along(counts)]
   counts <- unlist(counts, recursive = FALSE)
   ## colSum
-  dd_norm <- lapply(counts, colMeans, na.rm=FALSE)
+  dd_norm <- lapply(counts, colMeans, na.rm=TRUE)
   if(loessSmooth){
     dd_norm <- lapply(dd_norm, function(.ele){
       loess.smooth(x = seq_along(.ele),
@@ -67,7 +76,7 @@ plotProfile <- function(se, loessSmooth = TRUE, span = 1/25,
   d_melt$group <- factor(sub("^..", "", as.character(d_melt$sample_group)))
   d_melt$x <- as.numeric(sub("^B|D", "", as.character(d_melt$coord)))
   lines <- unique(c(0, d_melt$x[which(grepl("^D", as.character(d_melt$coord)))[1]] - header$`bin size`[1]/2))
-  x <- ifelse(facet=="group", "sample", "group")
+  
   if(length(xaxis_breaks)==0){
     xaxis_breaks <- c(-1*header$upstream[1], lines, sum(lines)+header$downstream[1])
   }
@@ -77,9 +86,14 @@ plotProfile <- function(se, loessSmooth = TRUE, span = 1/25,
                      header$downstream[1])
   }
   p <- ggplot(d_melt, aes_string(x="x", y="value", color=x)) + 
-    geom_line() + facet_wrap(facets = facet) +
+    geom_line()
+  if(setFacet){
+    p <- p + facet_wrap(facets = facet)
+  }
+  p <- p +
     xlab("distance (bp)") + ylab(header$`bin avg type`) + 
     scale_x_continuous(breaks = xaxis_breaks, 
                        labels = xaxis_label) +
-    theme_classic() 
+    theme_classic()
+  p
 }

@@ -1,7 +1,7 @@
 Package: deepToolsDownstream
 Type: Package
 Title: downstream plots for deepTools
-Version: 0.01
+Version: 0.02
 Encoding: UTF-8
 Author: Jianhong Ou
 Maintainer: Jianhong Ou <ou.jianhong@gmail.com>

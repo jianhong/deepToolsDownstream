@@ -2,6 +2,7 @@
 
 export(exportCount)
 export(importCount)
+export(mergeCounts)
 export(plotProfile)
 export(relabels)
 import(BiocGenerics)
