@@ -34,4 +34,5 @@ mergeCounts <- function(files, FUN=colMeans, na.rm=TRUE){
   }
   cn <- melt(cnts)
   colnames(cn) <- c("coord", "sample_group", "value", "L1")
+  cn
 }
