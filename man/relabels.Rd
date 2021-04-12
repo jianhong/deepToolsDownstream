@@ -19,3 +19,9 @@ a SummarizedExperiment object
 \description{
 Change sample/group labels of imported data.
 }
+\examples{
+file <- system.file("extdata", "count.gz", package= "deepToolsDownstream")
+se <- importCount(file)
+se <- relabels(se, "group_labels", c("gp1", "gp2"))
+plotProfile(se)
+}

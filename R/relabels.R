@@ -10,7 +10,7 @@
 #' @examples 
 #' file <- system.file("extdata", "count.gz", package= "deepToolsDownstream")
 #' se <- importCount(file)
-#' se <- relabels(se, "group_labels", c("gp1", "gp2))
+#' se <- relabels(se, "group_labels", c("gp1", "gp2"))
 #' plotProfile(se)
 relabels <- function(se, attr="sample_labels", values){
   stopifnot(is(se, "SummarizedExperiment"))
