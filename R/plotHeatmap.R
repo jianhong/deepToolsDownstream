@@ -1,8 +1,8 @@
 #' plot heatmap
 #' @description Plot a heatmap for counts.
 #' @param se a SummarizedExperiment object from \link{importCount}.
-#' @param facet group or sample. 
-#' This will be passed to \link[ggplot2:facet_wrap]{facet_wrap}.
+#' @param facet This will be passed to 
+#' \link[ggplot2:facet_grid]{facet_grid}:rows.
 #' It can be set to NULL.
 #' @param transformFUN The transform function of values.
 #' @param pseudo Pseudo value will be add to values before apply transformFUN.
@@ -22,6 +22,7 @@
 #' @importFrom ggplot2 ggplot aes_string geom_line theme_classic 
 #' scale_x_continuous facet_wrap xlab ylab scale_colour_gradient2
 #' scale_fill_gradient scale_y_discrete theme element_blank geom_tile
+#' facet_grid
 #' @importFrom stats as.formula
 #' @export
 #' @return ggplot object
@@ -30,7 +31,7 @@
 #' se <- importCount(file)
 #' plotHeatmap(se, yaxis_breaks="100033817", yaxis_label="geneA")
 plotHeatmap <- function(se,
-                        facet="sample", 
+                        facet=as.formula("group~sample"), 
                         transformFUN=log2,
                         pseudo=1,
                         orderFUN=rowMeans,
@@ -44,14 +45,14 @@ plotHeatmap <- function(se,
                         yaxis_label=NULL){
   stopifnot(is(se, "SummarizedExperiment"))
   if(length(facet)>0){
-    facet <- facet[1]
-    if(!facet %in% c("sample", "group")){
-      stop("facet must be sample or group")
+    if(is.character(facet)){
+      facet <- facet[1]
+      if(!facet %in% c("sample", "group")){
+        stop("facet must be sample or group")
+      }
     }
-    x <- ifelse(facet=="group", "sample", "group")
     setFacet <- TRUE
   }else{
-    x <- "sample"
     setFacet <- FALSE
   }
   counts <- assays(se)
@@ -133,7 +134,7 @@ plotHeatmap <- function(se,
   p <- ggplot(d_melt, aes_string(x="x", y="annoID", fill="value")) + 
     geom_tile(color=boderColor) + fill_gradient
   if(setFacet){
-    p <- p + facet_wrap(facets = facet)
+    p <- p + facet_grid(rows = facet, scales="free")
   }
   p <- p +
     xlab("distance (bp)") + ylab(header$`bin avg type`) + 

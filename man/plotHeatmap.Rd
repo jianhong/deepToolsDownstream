@@ -6,7 +6,7 @@
 \usage{
 plotHeatmap(
   se,
-  facet = "sample",
+  facet = as.formula("group~sample"),
   transformFUN = log2,
   pseudo = 1,
   orderFUN = rowMeans,
@@ -22,8 +22,8 @@ plotHeatmap(
 \arguments{
 \item{se}{a SummarizedExperiment object from \link{importCount}.}
 
-\item{facet}{group or sample. 
-This will be passed to \link[ggplot2:facet_wrap]{facet_wrap}.
+\item{facet}{This will be passed to 
+\link[ggplot2:facet_grid]{facet_grid}:rows.
 It can be set to NULL.}
 
 \item{transformFUN}{The transform function of values.}
