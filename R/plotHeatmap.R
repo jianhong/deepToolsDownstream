@@ -55,6 +55,12 @@ plotHeatmap <- function(se,
   }else{
     setFacet <- FALSE
   }
+  anno <- rowRanges(se)
+  if(any(duplicated(names(anno)))){
+    warning("Duplicated names for the features. Rename the features by number.")
+    names(anno) <- seq_along(anno)
+    rowRanges(se) <- anno
+  }
   counts <- assays(se)
   if(is.numeric(orderBy)){
     orderBy <- names(counts)[orderBy]
@@ -63,7 +69,6 @@ plotHeatmap <- function(se,
   if(length(orderBy)==0){
     stop("orderBy is not proper names of samples!")
   }
-  anno <- rowRanges(se)
   header <- metadata(se)
   ## split by group
   group <- anno$group
@@ -127,7 +132,11 @@ plotHeatmap <- function(se,
   if(length(xaxis_label)!=length(xaxis_breaks)){
     xaxis_breaks <- c(-1*header$upstream[1], lines,
                       sum(lines)+header$downstream[1])
-    xaxis_label <- c(-1*header$upstream[1], c("TSS", "TES")[seq_along(lines)],
+    refPointLabel <- header$`ref point`[[1]]
+    if(length(refPointLabel)!=length(lines)){
+      refPointLabel <- c("TSS", "TES")[seq_along(lines)]
+    }
+    xaxis_label <- c(-1*header$upstream[1], refPointLabel,
                      header$downstream[1])
   }
   
