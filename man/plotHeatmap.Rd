@@ -11,6 +11,8 @@ plotHeatmap(
   pseudo = 1,
   orderFUN = rowMeans,
   orderBy = 1,
+  sampleOrder = NULL,
+  groupOrder = NULL,
   fill_gradient = scale_fill_gradient(low = "blue", high = "red"),
   boderColor = NA,
   xaxis_breaks = NULL,
@@ -33,6 +35,8 @@ It can be set to NULL.}
 \item{orderFUN}{function used to reorder Y axis of the heatmap}
 
 \item{orderBy}{the sample name or index used to order Y axis}
+
+\item{sampleOrder, groupOrder}{order of the samples(column) or groups(row).}
 
 \item{fill_gradient}{color fill gradient function. 
 see \link[ggplot2:scale_colour_gradient]{scale_colour_gradient}.}

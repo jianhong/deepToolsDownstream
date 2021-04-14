@@ -8,7 +8,7 @@
 #' @param pseudo Pseudo value will be add to values before apply transformFUN.
 #' @param orderFUN function used to reorder Y axis of the heatmap
 #' @param orderBy the sample name or index used to order Y axis
-#' @param columnOrder order of the samples.
+#' @param sampleOrder,groupOrder order of the samples(column) or groups(row).
 #' @param fill_gradient color fill gradient function. 
 #' see \link[ggplot2:scale_colour_gradient]{scale_colour_gradient}.
 #' @param boderColor The color of the heatmap cell border.
@@ -24,7 +24,7 @@
 #' scale_x_continuous facet_wrap xlab ylab scale_colour_gradient2
 #' scale_fill_gradient scale_y_discrete theme element_blank geom_tile
 #' facet_grid
-#' @importFrom stats as.formula
+#' @importFrom stats as.formula relevel
 #' @export
 #' @return ggplot object
 #' @examples 
@@ -37,7 +37,8 @@ plotHeatmap <- function(se,
                         pseudo=1,
                         orderFUN=rowMeans,
                         orderBy=1,
-                        columnOrder=NULL,
+                        sampleOrder=NULL,
+                        groupOrder=NULL,
                         fill_gradient=scale_fill_gradient(
                           low = "blue", high = "red"),
                         boderColor=NA,
@@ -90,11 +91,18 @@ plotHeatmap <- function(se,
   d_melt <- melt(lapply(counts, as.matrix))
   colnames(d_melt) <- c("annoID", "coord", "value", "sample_group")
   d_melt$sample <- factor(old_name[sub("^(.).*$", "\\1", 
-                                       as.character(d_melt$sample_group))])
-  if(length(columnOrder)==length(levels(d_melt$sample))){
-    d_melt$sample <- reorder(d_melt$sample, columnOrder)
+                                       as.character(d_melt$sample_group))],
+                          levels = header$sample_labels)
+  if(length(sampleOrder)==length(levels(d_melt$sample)) &&
+     all(sampleOrder %in% levels(header$sample_labels))){
+    d_melt$sample <- relevel(d_melt$sample, sampleOrder)
   }
-  d_melt$group <- factor(sub("^..", "", as.character(d_melt$sample_group)))
+  d_melt$group <- factor(sub("^..", "", as.character(d_melt$sample_group)),
+                         levels = header$group_labels)
+  if(length(groupOrder)==length(levels(d_melt$group)) &&
+     all(groupOrder %in% levels(header$group_labels))){
+    d_melt$group <- relevel(d_melt$group, groupOrder)
+  }
   d_melt$x <- as.numeric(sub("^B|D", "", as.character(d_melt$coord)))
   if(is.function(transformFUN)){
     d_melt$value <- transformFUN(d_melt$value+pseudo)
