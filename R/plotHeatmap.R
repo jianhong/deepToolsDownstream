@@ -143,7 +143,7 @@ plotHeatmap <- function(se,
   p <- ggplot(d_melt, aes_string(x="x", y="annoID", fill="value")) + 
     geom_tile(color=boderColor) + fill_gradient
   if(setFacet){
-    p <- p + facet_grid(rows = facet, scales="free")
+    p <- p + facet_grid(rows = facet, space="free", scales="free")
   }
   p <- p +
     xlab("distance (bp)") + ylab(header$`bin avg type`) + 
