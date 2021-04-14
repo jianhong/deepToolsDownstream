@@ -8,6 +8,7 @@
 #' @param pseudo Pseudo value will be add to values before apply transformFUN.
 #' @param orderFUN function used to reorder Y axis of the heatmap
 #' @param orderBy the sample name or index used to order Y axis
+#' @param columnOrder order of the samples.
 #' @param fill_gradient color fill gradient function. 
 #' see \link[ggplot2:scale_colour_gradient]{scale_colour_gradient}.
 #' @param boderColor The color of the heatmap cell border.
@@ -36,6 +37,7 @@ plotHeatmap <- function(se,
                         pseudo=1,
                         orderFUN=rowMeans,
                         orderBy=1,
+                        columnOrder=NULL,
                         fill_gradient=scale_fill_gradient(
                           low = "blue", high = "red"),
                         boderColor=NA,
@@ -89,6 +91,9 @@ plotHeatmap <- function(se,
   colnames(d_melt) <- c("annoID", "coord", "value", "sample_group")
   d_melt$sample <- factor(old_name[sub("^(.).*$", "\\1", 
                                        as.character(d_melt$sample_group))])
+  if(length(columnOrder)==length(levels(d_melt$sample))){
+    d_melt$sample <- reorder(d_melt$sample, columnOrder)
+  }
   d_melt$group <- factor(sub("^..", "", as.character(d_melt$sample_group)))
   d_melt$x <- as.numeric(sub("^B|D", "", as.character(d_melt$coord)))
   if(is.function(transformFUN)){

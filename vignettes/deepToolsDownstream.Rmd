@@ -46,7 +46,7 @@ plot(p + scale_color_manual(values = cols))
 plotHeatmap(se, 
             fill_gradient = 
               scale_fill_gradient2(
-                low = "blue", mid = "yellow",
+                low = "darkblue", mid = "yellow",
                 high = "red", midpoint = 3.5),
             yaxis_breaks="100033817", #The position to highlight
             yaxis_label="geneA") # the lable to highlight
