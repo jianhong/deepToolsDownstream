@@ -39,7 +39,8 @@ importCount <- function(file){
   names(dd) <- header$sample_labels
   strand <- as.character(anno$V6)
   strand[strand=="."] <- "*"
-  anno <- GRanges(anno$V1, ranges = IRanges(anno$V2, anno$V3, names = anno$V4),
+  anno <- GRanges(anno$V1, ranges = IRanges(anno$V2, anno$V3, 
+                                            names = make.names(anno$V4, unique = TRUE)),
                   score=anno$V5, strand = strand, 
                   group = factor(rep(header$group_labels, diff(header$group_boundaries)),
                                  levels = header$group_labels))

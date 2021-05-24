@@ -1,3 +1,7 @@
+#Changes in version 0.0.4
+
+  * fix the bug of duplicated names.
+  
 #Changes in version 0.0.3
 
   * add function plotHeatmap.
