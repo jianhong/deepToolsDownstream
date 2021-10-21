@@ -1,3 +1,7 @@
+#Changes in version 0.0.6
+
+  * add filterCount function.
+  
 #Changes in version 0.0.5
 
   * fix the bug of not identical names.

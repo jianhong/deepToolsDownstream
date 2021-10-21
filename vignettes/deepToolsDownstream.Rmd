@@ -55,7 +55,7 @@ plotHeatmap(se,
 library(SummarizedExperiment)
 keep <- rowMeans(assays(se)[[1]], na.rm = TRUE) < 2 ## arbitory number
 nrow(se)
-se <- subset(se, subset=keep)
+se <- filterCount(se, subset=keep)
 nrow(se)
 table(keep)
 ## export data as matrix data for deepTools to plot
