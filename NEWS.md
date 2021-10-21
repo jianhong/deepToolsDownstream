@@ -1,3 +1,9 @@
+#Changes in version 0.0.5
+
+  * fix the bug of not identical names.
+  * replace the NA values to 0.
+  * update documentation.
+  
 #Changes in version 0.0.4
 
   * fix the bug of duplicated names.

@@ -19,6 +19,7 @@ output:
 ```{r setup, include=FALSE}
 suppressPackageStartupMessages({
   library(deepToolsDownstream)
+  library(SummarizedExperiment)
   library(S4Vectors)
   library(colorBlindness)
   library(ggplot2)
@@ -50,5 +51,14 @@ plotHeatmap(se,
                 high = "red", midpoint = 3.5),
             yaxis_breaks="100033817", #The position to highlight
             yaxis_label="geneA") # the lable to highlight
+## subset data
+library(SummarizedExperiment)
+keep <- rowMeans(assays(se)[[1]], na.rm = TRUE) < 2 ## arbitory number
+nrow(se)
+se <- subset(se, subset=keep)
+nrow(se)
+table(keep)
+## export data as matrix data for deepTools to plot
+exportCount(se, file=tempfile())
 ```
 

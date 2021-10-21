@@ -24,6 +24,7 @@ exportCount <- function(se, filename = tempfile()){
   headerL <- toJSON(header)
   anno <- as.data.frame(rowRanges(se))
   out <- do.call(cbind, assays(se))
+  out[is.na(out)] <- 0 ## remove NA.
   out <- cbind(anno[, c("seqnames", "start", "end")], name=rownames(anno), 
                anno[, c("score", "strand")], round(out, digits = 6))
   filen <- sub(".gz", "", filename)

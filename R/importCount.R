@@ -44,6 +44,12 @@ importCount <- function(file){
                   score=anno$V5, strand = strand, 
                   group = factor(rep(header$group_labels, diff(header$group_boundaries)),
                                  levels = header$group_labels))
+  dd <- lapply(dd, function(.ele){
+    if(!identical(rownames(.ele), names(anno))){
+      rownames(.ele) <- names(anno)
+    }
+    .ele
+  })
   se <- SummarizedExperiment(assays = dd, rowRanges = anno, 
                              metadata = header)
   se
